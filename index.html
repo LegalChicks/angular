@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Legal Chicks Empowerment Network</title>
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            'brand-purple': '#4A2A6C',
+            'brand-purple-dark': '#3A2054',
+            'brand-gold': '#D4AF37',
+            'brand-gold-light': '#E7C66B',
+          },
+        },
+      },
+    }
+  </script>
+<script type="importmap">
+{
+  "imports": {
+    "rxjs": "https://aistudiocdn.com/rxjs@^7.8.2?conditions=es2015",
+    "rxjs/operators": "https://aistudiocdn.com/rxjs@^7.8.2/operators?conditions=es2015",
+    "rxjs/ajax": "https://aistudiocdn.com/rxjs@^7.8.2/ajax?conditions=es2015",
+    "rxjs/webSocket": "https://aistudiocdn.com/rxjs@^7.8.2/webSocket?conditions=es2015",
+    "rxjs/testing": "https://aistudiocdn.com/rxjs@^7.8.2/testing?conditions=es2015",
+    "rxjs/fetch": "https://aistudiocdn.com/rxjs@^7.8.2/fetch?conditions=es2015",
+    "@angular/router": "https://next.esm.sh/@angular/router@^20.3.9?external=rxjs",
+    "@angular/core": "https://next.esm.sh/@angular/core@^20.3.9?external=rxjs",
+    "@angular/compiler": "https://next.esm.sh/@angular/compiler@^20.3.9?external=rxjs",
+    "@angular/common": "https://next.esm.sh/@angular/common@^20.3.9?external=rxjs",
+    "@angular/common/http": "https://next.esm.sh/@angular/common@^20.3.9/http?external=rxjs",
+    "@angular/forms": "https://next.esm.sh/@angular/forms@^20.3.9?external=rxjs",
+    "@angular/platform-browser": "https://next.esm.sh/@angular/platform-browser@^20.3.9?external=rxjs"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+<style>
+  /* Dark Mode Base Styles */
+  .dark {
+    color-scheme: dark;
+  }
+  
+  .dark body {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+  
+  .dark .bg-white {
+    background-color: #1f2937 !important;
+  }
+  
+  .dark .bg-gray-50 {
+    background-color: #374151 !important;
+  }
+  
+  .dark .bg-gray-100 {
+    background-color: #374151 !important;
+  }
+  
+  .dark .text-gray-800 {
+    color: #f9fafb !important;
+  }
+  
+  .dark .text-gray-700 {
+    color: #d1d5db !important;
+  }
+  
+  .dark .text-gray-600 {
+    color: #9ca3af !important;
+  }
+  
+  .dark .text-gray-500 {
+    color: #9ca3af !important;
+  }
+  
+  .dark .border-gray-200,
+  .dark .border-gray-300 {
+    border-color: #374151 !important;
+  }
+  
+  .dark input,
+  .dark select,
+  .dark textarea {
+    background-color: #1f2937 !important;
+    color: #f9fafb !important;
+    border-color: #374151 !important;
+  }
+  
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #6b7280 !important;
+  }
+  
+  /* Ensure dark mode applies to all elements */
+  html.dark {
+    color-scheme: dark;
+  }
+  
+  html.dark body {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+</style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 font-sans transition-colors duration-200">
+  <app-root></app-root>
+</body>
+</html>
