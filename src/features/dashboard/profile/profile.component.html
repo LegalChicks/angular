@@ -1,0 +1,104 @@
+<div class="max-w-4xl mx-auto">
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">My Profile</h1>
+        @if (!isEditing()) {
+          <button (click)="toggleEdit()" class="px-4 py-2 text-sm font-medium text-white bg-brand-purple rounded-md hover:bg-brand-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-purple-dark">
+            Edit Profile
+          </button>
+        }
+      </div>
+    </div>
+    <div class="p-6">
+      <!-- Welcome message for new members -->
+      @if (user()?.visibility === 'public' && !isEditing()) {
+        <div class="p-4 mb-6 text-sm text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-800 rounded-lg">
+          <div class="flex items-start">
+            <svg class="w-5 h-5 mt-0.5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            <div>
+              <p class="font-semibold">Your profile is visible in the Member Directory!</p>
+              <p class="mt-1">Other members can see your name and email. You can change your visibility settings below.</p>
+              <a routerLink="/dashboard/directory" class="mt-2 inline-block text-brand-purple hover:underline font-medium">View Member Directory →</a>
+            </div>
+          </div>
+        </div>
+      }
+      @if (successMessage()) {
+        <div class="p-4 mb-6 text-sm text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900 rounded-lg border border-green-200 dark:border-green-800" role="alert">
+          {{ successMessage() }}
+        </div>
+      }
+      <form [formGroup]="profileForm" (ngSubmit)="onSave()">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+            <input type="text" id="name" formControlName="name" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm disabled:bg-gray-100 dark:disabled:bg-gray-800">
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email Address</label>
+            <input type="email" id="email" formControlName="email" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm disabled:bg-gray-100 dark:disabled:bg-gray-800">
+          </div>
+           <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Member Role</label>
+            <p class="mt-2 text-gray-800 dark:text-gray-200 font-semibold capitalize">{{ user()?.role }}</p>
+          </div>
+           <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Member ID</label>
+            <p class="mt-2 text-gray-500 dark:text-gray-400 font-mono text-sm">{{ user()?.id }}</p>
+          </div>
+        </div>
+        
+        <!-- Profile Visibility Section -->
+        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-200">Profile Visibility</h3>
+            <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">Choose who can see your profile in the member directory.</p>
+            
+            @if(isEditing()) {
+              <div class="mt-4 space-y-4">
+                <div class="flex items-center">
+                  <input id="visibility-public" name="visibility" type="radio" value="public" formControlName="visibility" class="focus:ring-brand-purple h-4 w-4 text-brand-purple border-gray-300">
+                  <label for="visibility-public" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Public <span class="text-gray-500 dark:text-gray-400 font-normal">- Visible to all members in the directory.</span>
+                  </label>
+                </div>
+                 <div class="flex items-center">
+                  <input id="visibility-private" name="visibility" type="radio" value="private" formControlName="visibility" class="focus:ring-brand-purple h-4 w-4 text-brand-purple border-gray-300 dark:border-gray-600">
+                  <label for="visibility-private" class="ml-3 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Private <span class="text-gray-500 dark:text-gray-400 font-normal">- Hidden from the member directory.</span>
+                  </label>
+                </div>
+              </div>
+            } @else {
+               <div class="mt-4">
+                 <span class="px-3 py-1 text-sm font-semibold rounded-full" [class.bg-green-100]="user()?.visibility === 'public'" [class.text-green-800]="user()?.visibility === 'public'" [class.bg-red-100]="user()?.visibility === 'private'" [class.text-red-800]="user()?.visibility === 'private'">
+                    {{ user()?.visibility === 'public' ? 'Public' : 'Private' }}
+                 </span>
+               </div>
+            }
+        </div>
+
+        @if (isEditing()) {
+          <div class="flex justify-end mt-8 space-x-4">
+            <button type="button" (click)="toggleEdit()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none">
+              Cancel
+            </button>
+            <button type="submit" [disabled]="profileForm.invalid || isSaving()" class="px-6 py-2 text-sm font-medium text-white bg-brand-gold rounded-md hover:bg-brand-gold-light focus:outline-none disabled:bg-gray-400 disabled:cursor-not-allowed">
+              @if (isSaving()) {
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Saving...
+              } @else {
+                Save Changes
+              }
+            </button>
+          </div>
+        }
+      </form>
+    </div>
+  </div>
+</div>

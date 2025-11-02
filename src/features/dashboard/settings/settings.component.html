@@ -1,0 +1,387 @@
+<div class="max-w-6xl mx-auto space-y-8">
+  <!-- Header -->
+  <div class="pb-4 border-b border-gray-200 dark:border-gray-700">
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200">{{ t('settings').title }}</h1>
+    <p class="mt-1 text-gray-600 dark:text-gray-400">Manage your portal preferences, appearance, notifications, and security settings.</p>
+  </div>
+
+  <!-- Success/Error Messages -->
+  @if (successMessage()) {
+    <div class="p-4 text-sm text-green-700 bg-green-100 border border-green-200 rounded-lg shadow-sm" role="alert">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+        </svg>
+        {{ successMessage() }}
+      </div>
+    </div>
+  }
+
+  @if (errorMessage()) {
+    <div class="p-4 text-sm text-red-700 bg-red-100 border border-red-200 rounded-lg shadow-sm" role="alert">
+      <div class="flex items-center">
+        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path>
+        </svg>
+        {{ errorMessage() }}
+      </div>
+    </div>
+  }
+
+  <!-- Tab Navigation -->
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <nav class="flex space-x-8">
+      <button 
+        (click)="setActiveTab('general')"
+        [class.border-brand-purple]="activeTab() === 'general'"
+        [class.text-brand-purple]="activeTab() === 'general'"
+        [class.border-transparent]="activeTab() !== 'general'"
+        [class.text-gray-500]="activeTab() !== 'general'"
+        [class.dark:text-gray-400]="activeTab() !== 'general'"
+        class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+        {{ t('settings').general }}
+      </button>
+      <button 
+        (click)="setActiveTab('security')"
+        [class.border-brand-purple]="activeTab() === 'security'"
+        [class.text-brand-purple]="activeTab() === 'security'"
+        [class.border-transparent]="activeTab() !== 'security'"
+        [class.text-gray-500]="activeTab() !== 'security'"
+        [class.dark:text-gray-400]="activeTab() !== 'security'"
+        class="py-4 px-1 border-b-2 font-medium text-sm whitespace-nowrap hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
+        {{ t('settings').security }}
+      </button>
+    </nav>
+  </div>
+
+  <!-- General Settings Tab -->
+  @if (activeTab() === 'general') {
+    <div class="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <!-- Preferences Card -->
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div class="flex items-center mb-4">
+          <svg class="w-6 h-6 text-brand-purple mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
+          </svg>
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ t('settings').preferences }}</h2>
+        </div>
+        <div class="mt-4 space-y-4">
+          <div>
+            <label for="language" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ t('settings').language }}</label>
+            <select 
+              id="language" 
+              name="language" 
+              [value]="language()"
+              (change)="onLanguageChange($event)"
+              class="block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+              <option value="en">🇺🇸 English</option>
+              <option value="tl">🇵🇭 Tagalog</option>
+              <option value="il">🇵🇭 Ilocano</option>
+            </select>
+            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Select your preferred language for the interface.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Appearance Card -->
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div class="flex items-center mb-4">
+          <svg class="w-6 h-6 text-brand-purple mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+          </svg>
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ t('settings').appearance }}</h2>
+        </div>
+        <div class="mt-4 space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex-1">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('settings').darkMode }}</label>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('settings').darkModeDesc }}</p>
+            </div>
+            <button 
+              type="button" 
+              (click)="toggleDarkMode()" 
+              class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2"
+              [class.bg-brand-purple]="darkMode()" 
+              [class.bg-gray-200]="!darkMode()">
+              <span class="sr-only">Toggle dark mode</span>
+              <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out"
+                    [class.translate-x-6]="darkMode()" 
+                    [class.translate-x-1]="!darkMode()"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Card -->
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md md:col-span-2">
+        <div class="flex items-center mb-4">
+          <svg class="w-6 h-6 text-brand-purple mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+          </svg>
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ t('settings').emailNotifications }}</h2>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Choose which email notifications you want to receive.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div>
+              <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('notifications').newMemberSignup }}</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Get notified when new members join the network.</span>
+            </div>
+            <button 
+              type="button" 
+              (click)="toggleNotification('newMembers')"
+              class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2"
+              [class.bg-brand-purple]="notifications().newMembers"
+              [class.bg-gray-300]="!notifications().newMembers">
+              <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out"
+                    [class.translate-x-6]="notifications().newMembers"
+                    [class.translate-x-1]="!notifications().newMembers"></span>
+            </button>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div>
+              <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('notifications').weeklySummary }}</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Receive a weekly summary of your farm's performance.</span>
+            </div>
+            <button 
+              type="button" 
+              (click)="toggleNotification('weeklySummary')"
+              class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2"
+              [class.bg-brand-purple]="notifications().weeklySummary"
+              [class.bg-gray-300]="!notifications().weeklySummary">
+              <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out"
+                    [class.translate-x-6]="notifications().weeklySummary"
+                    [class.translate-x-1]="!notifications().weeklySummary"></span>
+            </button>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div>
+              <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('notifications').supplyUpdates }}</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Notifications about new products and special offers.</span>
+            </div>
+            <button 
+              type="button" 
+              (click)="toggleNotification('supplyUpdates')"
+              class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2"
+              [class.bg-brand-purple]="notifications().supplyUpdates"
+              [class.bg-gray-300]="!notifications().supplyUpdates">
+              <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out"
+                    [class.translate-x-6]="notifications().supplyUpdates"
+                    [class.translate-x-1]="!notifications().supplyUpdates"></span>
+            </button>
+          </div>
+          <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div>
+              <span class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('notifications').allNotifications }}</span>
+              <span class="text-xs text-gray-500 dark:text-gray-400">Master toggle for all email notifications.</span>
+            </div>
+            <button 
+              type="button" 
+              (click)="toggleNotification('emailNotifications')"
+              class="relative inline-flex items-center h-6 rounded-full w-11 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-purple focus:ring-offset-2"
+              [class.bg-brand-purple]="notifications().emailNotifications"
+              [class.bg-gray-300]="!notifications().emailNotifications">
+              <span class="inline-block w-4 h-4 transform bg-white rounded-full transition-transform duration-200 ease-in-out"
+                    [class.translate-x-6]="notifications().emailNotifications"
+                    [class.translate-x-1]="!notifications().emailNotifications"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Security Tab -->
+  @if (activeTab() === 'security') {
+    <div class="grid grid-cols-1 gap-8">
+      <!-- Account Security Card -->
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div class="flex items-center mb-4">
+          <svg class="w-6 h-6 text-brand-purple mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+          </svg>
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ t('settings').security }}</h2>
+        </div>
+        <div class="mt-4 space-y-6">
+          <!-- Password Section -->
+          <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div class="flex-1">
+              <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ t('settings').changePassword }}</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Change your account password regularly to keep your account secure.</p>
+            </div>
+            <button 
+              (click)="openPasswordModal()"
+              class="px-4 py-2 text-sm font-medium text-white bg-brand-purple rounded-md hover:bg-brand-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-purple">
+              {{ t('settings').changePassword }}
+            </button>
+          </div>
+
+          <!-- Two-Factor Authentication Section -->
+          <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+            <div class="flex-1">
+              <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">{{ t('settings').twoFactor }}</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ t('settings').twoFactorDesc }}</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="px-3 py-1 text-xs font-semibold text-red-800 bg-red-100 rounded-full">
+                Disabled
+              </span>
+              <button 
+                disabled
+                class="px-4 py-2 text-sm font-medium text-gray-400 bg-gray-200 rounded-md cursor-not-allowed"
+                title="2FA coming soon">
+                Enable 2FA
+              </button>
+            </div>
+          </div>
+
+          <!-- Account Info -->
+          <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-3">{{ t('settings').accountInfo }}</h3>
+            <div class="space-y-2 text-sm">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">{{ t('common').email }}:</span>
+                <span class="font-medium text-gray-800 dark:text-gray-200">{{ currentUser()?.email }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">{{ t('profile').memberId }}:</span>
+                <span class="font-medium text-gray-800 dark:text-gray-200">{{ currentUser()?.id }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">{{ t('profile').role }}:</span>
+                <span class="font-medium text-gray-800 dark:text-gray-200 capitalize">{{ currentUser()?.role }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Save Button (only for general tab) -->
+  @if (activeTab() === 'general') {
+    <div class="flex justify-end pt-6 border-t border-gray-200 dark:border-gray-700">
+      <button 
+        (click)="saveSettings()" 
+        [disabled]="isSaving()" 
+        class="flex items-center justify-center px-6 py-2 font-medium text-white bg-brand-gold rounded-md hover:bg-brand-gold-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold disabled:bg-gray-400 disabled:cursor-not-allowed">
+        @if (isSaving()) {
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          {{ t('common').loading }}
+        } @else {
+          {{ t('common').save }}
+        }
+      </button>
+    </div>
+  }
+</div>
+
+<!-- Password Change Modal -->
+@if (showPasswordModal()) {
+  <div class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="flex items-end justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+      <!-- Background overlay -->
+      <div class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" (click)="closePasswordModal()" aria-hidden="true"></div>
+
+      <!-- Modal panel -->
+      <div class="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 rounded-lg shadow-xl">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-gray-100" id="modal-title">
+            {{ t('settings').changePassword }}
+          </h3>
+          <button 
+            (click)="closePasswordModal()"
+            class="text-gray-400 hover:text-gray-500 focus:outline-none">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="space-y-4">
+          <div>
+            <label for="currentPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('settings').currentPassword }}</label>
+            <input 
+              type="password" 
+              id="currentPassword" 
+              formControlName="currentPassword"
+              class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm"
+              [placeholder]="'Enter your current password'">
+            @if (passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched) {
+              <p class="mt-1 text-xs text-red-600 dark:text-red-400">Current password is required.</p>
+            }
+          </div>
+
+          <div>
+            <label for="newPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('settings').newPassword }}</label>
+            <input 
+              type="password" 
+              id="newPassword" 
+              formControlName="newPassword"
+              class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm"
+              [placeholder]="'Enter your new password (min. 8 characters)'">
+            @if (passwordForm.get('newPassword')?.hasError('required') && passwordForm.get('newPassword')?.touched) {
+              <p class="mt-1 text-xs text-red-600 dark:text-red-400">New password is required.</p>
+            }
+            @if (passwordForm.get('newPassword')?.hasError('minlength') && passwordForm.get('newPassword')?.touched) {
+              <p class="mt-1 text-xs text-red-600 dark:text-red-400">Password must be at least 8 characters long.</p>
+            }
+          </div>
+
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 dark:text-gray-300">{{ t('settings').confirmNewPassword }}</label>
+            <input 
+              type="password" 
+              id="confirmPassword" 
+              formControlName="confirmPassword"
+              class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm"
+              [placeholder]="'Confirm your new password'">
+            @if (passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched) {
+              <p class="mt-1 text-xs text-red-600 dark:text-red-400">
+                @if (passwordForm.hasError('passwordMismatch')) {
+                  Passwords do not match.
+                } @else {
+                  Please confirm your new password.
+                }
+              </p>
+            }
+          </div>
+
+          @if (errorMessage()) {
+            <div class="p-3 text-sm text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900 border border-red-200 dark:border-red-800 rounded-md">
+              {{ errorMessage() }}
+            </div>
+          }
+
+          <div class="flex justify-end gap-3 pt-4">
+            <button 
+              type="button"
+              (click)="closePasswordModal()"
+              class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-200 dark:bg-gray-600 rounded-md hover:bg-gray-300 dark:hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+              {{ t('common').cancel }}
+            </button>
+            <button 
+              type="submit"
+              [disabled]="passwordForm.invalid || isSaving()"
+              class="px-4 py-2 text-sm font-medium text-white bg-brand-purple rounded-md hover:bg-brand-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-purple disabled:bg-gray-400 disabled:cursor-not-allowed">
+              @if (isSaving()) {
+                <span class="flex items-center">
+                  <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {{ t('common').loading }}
+                </span>
+              } @else {
+                {{ t('settings').changePassword }}
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

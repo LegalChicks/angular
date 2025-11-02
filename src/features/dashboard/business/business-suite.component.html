@@ -1,0 +1,208 @@
+<div class="space-y-6">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200">Your Business Suite</h1>
+    <p class="mt-1 text-gray-600 dark:text-gray-400">
+      Manage your farm's finances, track sales, and monitor profitability all in one place.
+    </p>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <nav class="-mb-px flex space-x-6" aria-label="Tabs">
+      <button (click)="changeTab('profitability')"
+              [class.border-brand-purple]="activeTab() === 'profitability'"
+              [class.text-brand-purple]="activeTab() === 'profitability'"
+              [class.text-gray-500]="activeTab() !== 'profitability'"
+              [class.dark:text-gray-400]="activeTab() !== 'profitability'"
+              [class.hover:text-gray-700]="activeTab() !== 'profitability'"
+              [class.dark:hover:text-gray-300]="activeTab() !== 'profitability'"
+              [class.hover:border-gray-300]="activeTab() !== 'profitability'"
+              [class.dark:hover:border-gray-600]="activeTab() !== 'profitability'"
+              class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+        Profitability
+      </button>
+      <button (click)="changeTab('invoices')"
+              [class.border-brand-purple]="activeTab() === 'invoices'"
+              [class.text-brand-purple]="activeTab() === 'invoices'"
+              [class.text-gray-500]="activeTab() !== 'invoices'"
+              [class.dark:text-gray-400]="activeTab() !== 'invoices'"
+              [class.hover:text-gray-700]="activeTab() !== 'invoices'"
+              [class.dark:hover:text-gray-300]="activeTab() !== 'invoices'"
+              [class.hover:border-gray-300]="activeTab() !== 'invoices'"
+              [class.dark:hover:border-gray-600]="activeTab() !== 'invoices'"
+              class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+        Invoices
+      </button>
+      <button (click)="changeTab('expenses')"
+              [class.border-brand-purple]="activeTab() === 'expenses'"
+              [class.text-brand-purple]="activeTab() === 'expenses'"
+              [class.text-gray-500]="activeTab() !== 'expenses'"
+              [class.dark:text-gray-400]="activeTab() !== 'expenses'"
+              [class.hover:text-gray-700]="activeTab() !== 'expenses'"
+              [class.dark:hover:text-gray-300]="activeTab() !== 'expenses'"
+              [class.hover:border-gray-300]="activeTab() !== 'expenses'"
+              [class.dark:hover:border-gray-600]="activeTab() !== 'expenses'"
+              class="whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
+        Expenses
+      </button>
+    </nav>
+  </div>
+
+  <!-- Tab Content -->
+  <div class="mt-6">
+    @if (isLoading()) {
+      <div class="flex justify-center items-center p-16 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <div class="text-center text-gray-500 dark:text-gray-400">
+          <svg class="animate-spin mx-auto h-8 w-8 text-brand-purple" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <p class="mt-4 text-lg">Loading Financial Data...</p>
+        </div>
+      </div>
+    } @else {
+      @switch (activeTab()) {
+        @case ('profitability') {
+          @if (profitabilityData(); as data) {
+            <div class="space-y-8">
+              <!-- KPIs -->
+              <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
+                <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Revenue</p>
+                  <p class="mt-1 text-3xl font-bold text-green-600">{{ data.totalRevenue | currency:'PHP':'symbol':'1.2-2' }}</p>
+                </div>
+                <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Expenses</p>
+                  <p class="mt-1 text-3xl font-bold text-red-600">{{ data.totalExpenses | currency:'PHP':'symbol':'1.2-2' }}</p>
+                </div>
+                <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                  <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Net Profit</p>
+                  <p class="mt-1 text-3xl font-bold text-brand-purple">{{ data.netProfit | currency:'PHP':'symbol':'1.2-2' }}</p>
+                </div>
+              </div>
+              <!-- Chart -->
+              <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Revenue vs. Expenses</h2>
+                <div class="mt-6 h-72 flex items-end justify-between space-x-4">
+                  @for (monthData of data.revenueVsExpenses; track monthData.month) {
+                    <div class="flex-1 flex flex-col items-center">
+                      <div class="w-full h-full flex items-end justify-center space-x-1">
+                        <div class="w-1/2 bg-green-300 rounded-t-md hover:bg-green-400" [style.height]="getBarHeight(monthData.revenue)"></div>
+                        <div class="w-1/2 bg-red-300 rounded-t-md hover:bg-red-400" [style.height]="getBarHeight(monthData.expenses)"></div>
+                      </div>
+                      <span class="mt-2 text-xs font-medium text-gray-600 dark:text-gray-400">{{ monthData.month }}</span>
+                    </div>
+                  }
+                </div>
+                <div class="flex justify-center mt-4 space-x-4 text-sm">
+                    <div class="flex items-center"><span class="w-3 h-3 mr-2 bg-green-300 rounded-sm"></span>Revenue</div>
+                    <div class="flex items-center"><span class="w-3 h-3 mr-2 bg-red-300 rounded-sm"></span>Expenses</div>
+                </div>
+              </div>
+            </div>
+          }
+        }
+        @case ('invoices') {
+          <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+             <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Sales Invoices</h2>
+             <div class="mt-4 flow-root">
+                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+                      <thead>
+                        <tr>
+                          <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 sm:pl-0">Invoice ID</th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Client</th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Amount</th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Status</th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Due Date</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                        @for (invoice of invoices(); track invoice.id) {
+                          <tr class="bg-white dark:bg-gray-800">
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 dark:text-gray-200 sm:pl-0">{{ invoice.id }}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{{ invoice.clientName }}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{{ invoice.amount | currency:'PHP':'symbol':'1.2-2' }}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">
+                              <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" [class]="getStatusClass(invoice.status)">
+                                {{ invoice.status }}
+                              </span>
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{{ invoice.dueDate }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+          </div>
+        }
+        @case ('expenses') {
+          <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <div class="lg:col-span-2 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Recent Expenses</h2>
+               <div class="mt-4 flow-root">
+                <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                  <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <table class="min-w-full divide-y divide-gray-300 dark:divide-gray-700">
+                       <thead>
+                        <tr>
+                          <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-200 sm:pl-0">Date</th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Category</th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Description</th>
+                          <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 dark:text-gray-200">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody class="divide-y divide-gray-200 dark:divide-gray-700 bg-white dark:bg-gray-800">
+                        @for (expense of expenses(); track expense.id) {
+                           <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm text-gray-500 dark:text-gray-400 sm:pl-0">{{ expense.date }}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{{ expense.category }}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500 dark:text-gray-400">{{ expense.description }}</td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm font-medium text-red-600">-{{ expense.amount | currency:'PHP':'symbol':'1.2-2' }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+              <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Add New Expense</h2>
+              <form class="mt-4 space-y-4" [formGroup]="expenseForm" (ngSubmit)="addExpense()">
+                <div>
+                  <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                  <input type="text" id="description" formControlName="description" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+                </div>
+                 <div>
+                  <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Amount (PHP)</label>
+                  <input type="number" id="amount" formControlName="amount" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+                </div>
+                 <div>
+                  <label for="category" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                  <select id="category" formControlName="category" class="mt-1 block w-full px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md shadow-sm focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+                    <option>Feeds</option>
+                    <option>Vitamins</option>
+                    <option>Equipment</option>
+                    <option>Utilities</option>
+                    <option>Other</option>
+                  </select>
+                </div>
+                <button type="submit" [disabled]="expenseForm.invalid || isAddingExpense()" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-brand-purple hover:bg-brand-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-purple-dark disabled:bg-gray-400">
+                  @if (isAddingExpense()) {
+                    Saving...
+                  } @else {
+                    Add Expense
+                  }
+                </button>
+              </form>
+            </div>
+          </div>
+        }
+      }
+    }
+  </div>
+</div>

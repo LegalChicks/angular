@@ -1,0 +1,105 @@
+<div class="space-y-8">
+  <!-- Header and Benefits -->
+  <div class="text-center">
+    <h1 class="text-4xl font-extrabold tracking-tight text-brand-purple sm:text-5xl">Your Member-Exclusive Supply Hub</h1>
+    <p class="max-w-3xl mx-auto mt-4 text-xl text-gray-600 dark:text-gray-400">
+      As part of our cooperative, you get exclusive access to supplies at 10-15% below retail prices. This is our commitment to your farm's success.
+    </p>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:items-start">
+    
+    <!-- Product Listings -->
+    <div class="space-y-6 lg:col-span-2">
+      <!-- Quality Guarantee -->
+      <div class="p-6 bg-purple-50 dark:bg-purple-900 rounded-lg border border-purple-200 dark:border-purple-800">
+        <h3 class="text-xl font-bold text-brand-purple-dark dark:text-purple-300">The LCEN Quality Guarantee</h3>
+        <p class="mt-2 text-gray-700 dark:text-gray-300">
+          Our pure Rhode Island Red (RIR) chicks come from our meticulously managed breeder flocks. We guarantee high-grade, unadulterated feeds formulated for optimal growth and egg production. Your success starts with quality inputs.
+        </p>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        @for (product of products(); track product.id) {
+          <div class="flex flex-col bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm overflow-hidden">
+            <img class="object-cover h-48 w-full" [src]="product.imageUrl" [alt]="product.name">
+            <div class="p-4 flex flex-col flex-1">
+              <h4 class="text-lg font-bold text-gray-800 dark:text-gray-200">{{ product.name }}</h4>
+              <p class="mt-1 text-sm text-gray-600 dark:text-gray-400 flex-1">{{ product.description }}</p>
+              <div class="flex items-center justify-between mt-4">
+                <p class="text-lg font-semibold text-brand-purple">₱{{ product.price }} <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ product.unit }}</span></p>
+                <button (click)="addToCart(product)" class="px-4 py-2 text-sm font-medium text-white bg-brand-purple rounded-md hover:bg-brand-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-purple-dark">
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Order Summary & Cart -->
+    <div class="lg:col-span-1">
+      <div class="sticky top-6">
+        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md space-y-6">
+          <h3 class="text-2xl font-bold text-gray-800 dark:text-gray-200">Your Order</h3>
+
+          <!-- Cart Items -->
+          @if (cart().length > 0) {
+            <div class="space-y-4 max-h-80 overflow-y-auto pr-2">
+              @for (item of cart(); track item.id) {
+                <div class="flex items-start justify-between">
+                  <div>
+                    <p class="font-semibold text-gray-800 dark:text-gray-200">{{ item.name }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">₱{{ item.price }}</p>
+                  </div>
+                  <div class="flex items-center space-x-2">
+                    <input type="number" [ngModel]="item.quantity" (change)="updateQuantity(item.id, $event)" min="1" class="w-16 px-2 py-1 text-center bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-gray-100 rounded-md">
+                    <button (click)="removeFromCart(item.id)" class="text-gray-400 dark:text-gray-500 hover:text-red-500 dark:hover:text-red-400">
+                      <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 012 0v6a1 1 0 11-2 0V8z" clip-rule="evenodd"></path></svg>
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Total -->
+            <div class="pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div class="flex justify-between items-center font-bold text-xl text-gray-800 dark:text-gray-200">
+                <span>Total</span>
+                <span>₱{{ cartTotal().toFixed(2) }}</span>
+              </div>
+            </div>
+          } @else {
+            <p class="text-center text-gray-500 dark:text-gray-400 py-8">Your cart is empty.</p>
+          }
+
+          <!-- Distribution & Support Section -->
+          <div class="pt-4 space-y-4">
+              <div class="p-4 text-sm text-blue-800 dark:text-blue-300 bg-blue-50 dark:bg-blue-900 rounded-lg border border-blue-200 dark:border-blue-800">
+                <p><span class="font-bold">Community-Focused Distribution:</span> To keep costs low for our entire community, all orders are delivered to scheduled Barangay Distribution Hubs for pickup. We'll notify you of the pickup schedule after you place your order.</p>
+              </div>
+
+              <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                      <input id="assignDistributor" type="checkbox" [(ngModel)]="assignDistributor" class="focus:ring-brand-purple h-4 w-4 text-brand-purple border-gray-300 dark:border-gray-600 rounded">
+                  </div>
+                  <div class="ml-3 text-sm">
+                      <label for="assignDistributor" class="font-medium text-gray-800 dark:text-gray-200">Request a Local LCEN Distributor.</label>
+                      <p class="text-gray-600 dark:text-gray-400">Think of your distributor as a personal guide for your supplies, delivery updates, and on-the-spot advice.</p>
+                  </div>
+              </div>
+          </div>
+          
+          <!-- Checkout Button -->
+          <button (click)="placeOrder()" [disabled]="cart().length === 0" class="w-full px-6 py-3 font-semibold text-white bg-brand-gold rounded-md hover:bg-brand-gold-light focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gold disabled:bg-gray-400 disabled:cursor-not-allowed">
+            Submit Order Request
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

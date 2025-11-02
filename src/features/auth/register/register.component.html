@@ -1,0 +1,145 @@
+<div class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 py-12">
+  <div class="w-full max-w-2xl p-8 space-y-8 bg-white dark:bg-gray-800 rounded-lg shadow-2xl">
+    
+    @if (!successMessage()) {
+      <div>
+        <div class="text-center">
+          <h1 class="text-4xl font-bold tracking-tight text-brand-purple">Magsimula Tayo: Your Journey Begins</h1>
+          <p class="mt-2 text-lg text-gray-600 dark:text-gray-400">Join the LCEN cooperative and build a sustainable livelihood with a network that ensures your success.</p>
+        </div>
+
+        <div class="mt-8 p-6 bg-purple-50 dark:bg-purple-900 rounded-lg border border-purple-200 dark:border-purple-800">
+            <h3 class="font-semibold text-brand-purple-dark dark:text-purple-300">As an LCEN Member-Partner, you receive:</h3>
+            <ul class="mt-4 space-y-3 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 mr-2 text-brand-gold flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    <span><strong>'Guided Business Warranty':</strong> Personal mentorship from day one until your first harvest. <span class="italic text-gray-500">Hindi ka nag-iisa.</span></span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 mr-2 text-brand-gold flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    <span><strong>Premium Supply Access:</strong> Exclusive member discounts on pure RIR chicks and high-quality feeds.</span>
+                </li>
+                <li class="flex items-start">
+                    <svg class="w-5 h-5 mr-2 text-brand-gold flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    <span><strong>Collective Market Power:</strong> We combine our harvest to get better prices. You farm, we find the buyers.</span>
+                </li>
+                 <li class="flex items-start">
+                    <svg class="w-5 h-5 mr-2 text-brand-gold flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    <span><strong>TESDA NC II Opportunities:</strong> Earn nationally recognized certifications to formalize your skills.</span>
+                </li>
+            </ul>
+        </div>
+
+        <form class="mt-8 space-y-6" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+          <div class="rounded-md shadow-sm space-y-4">
+            <div>
+              <label for="name" class="sr-only">Full Name</label>
+              <input id="name" type="text" formControlName="name" required placeholder="Full Name"
+                     [class.border-red-300]="registerForm.get('name')?.invalid && registerForm.get('name')?.touched"
+                     [class.border-green-300]="registerForm.get('name')?.valid && registerForm.get('name')?.touched"
+                     class="appearance-none rounded-md relative block w-full px-3 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+              @if (registerForm.get('name')?.invalid && registerForm.get('name')?.touched) {
+                <p class="mt-1 text-xs text-red-600">Full name is required.</p>
+              }
+            </div>
+            <div>
+              <label for="email-address" class="sr-only">Email address</label>
+              <input id="email-address" type="email" formControlName="email" required placeholder="Email address"
+                     [class.border-red-300]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+                     [class.border-green-300]="registerForm.get('email')?.valid && registerForm.get('email')?.touched"
+                     class="appearance-none rounded-md relative block w-full px-3 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+              @if (registerForm.get('email')?.hasError('required') && registerForm.get('email')?.touched) {
+                <p class="mt-1 text-xs text-red-600">Email address is required.</p>
+              }
+              @if (registerForm.get('email')?.hasError('email') && registerForm.get('email')?.touched) {
+                <p class="mt-1 text-xs text-red-600">Please enter a valid email address.</p>
+              }
+            </div>
+            <div>
+              <label for="password" class="sr-only">Password</label>
+              <input id="password" type="password" formControlName="password" required placeholder="Password (min. 8 characters)"
+                     [class.border-red-300]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+                     [class.border-green-300]="registerForm.get('password')?.valid && registerForm.get('password')?.touched"
+                     class="appearance-none rounded-md relative block w-full px-3 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+              @if (registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched) {
+                <p class="mt-1 text-xs text-red-600">Password is required.</p>
+              }
+              @if (registerForm.get('password')?.hasError('minlength') && registerForm.get('password')?.touched) {
+                <p class="mt-1 text-xs text-red-600">Password must be at least 8 characters long.</p>
+              }
+            </div>
+            <div>
+              <label for="confirm-password" class="sr-only">Confirm Password</label>
+              <input id="confirm-password" type="password" formControlName="confirmPassword" required placeholder="Confirm Password"
+                     [class.border-red-300]="(registerForm.hasError('passwordMismatch') || registerForm.get('confirmPassword')?.invalid) && registerForm.get('confirmPassword')?.touched"
+                     [class.border-green-300]="registerForm.get('confirmPassword')?.valid && !registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched"
+                     class="appearance-none rounded-md relative block w-full px-3 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-brand-purple focus:border-brand-purple sm:text-sm">
+              @if (registerForm.get('confirmPassword')?.hasError('required') && registerForm.get('confirmPassword')?.touched) {
+                <p class="mt-1 text-xs text-red-600">Please confirm your password.</p>
+              }
+              @if (registerForm.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched) {
+                <p class="mt-1 text-xs text-red-600">Passwords do not match.</p>
+              }
+            </div>
+          </div>
+
+          <div class="space-y-4">
+             <div class="flex items-start">
+                <div class="flex items-center h-5">
+                    <input id="agreeToTerms" formControlName="agreeToTerms" type="checkbox" class="focus:ring-brand-purple h-4 w-4 text-brand-purple border-gray-300 rounded">
+                </div>
+                <div class="ml-3 text-sm">
+                    <label for="agreeToTerms" class="text-gray-700 dark:text-gray-300 font-medium">Our Cooperative Pledge:</label>
+                    <p class="text-gray-600 dark:text-gray-400">I commit to the LCEN values of community and transparency, and will maintain the highest farm quality standards.</p>
+                    @if (registerForm.get('agreeToTerms')?.hasError('required') && registerForm.get('agreeToTerms')?.touched) {
+                      <p class="mt-1 text-xs text-red-600">You must agree to the cooperative pledge to register.</p>
+                    }
+                </div>
+            </div>
+            <p class="text-xs text-gray-500">
+                Your data will be used exclusively for LCEN membership purposes and to connect you with livelihood support programs. We respect your privacy.
+            </p>
+          </div>
+
+          @if (errorMessage()) {
+            <div class="p-3 text-sm text-red-700 dark:text-red-400 bg-red-100 dark:bg-red-900 rounded-md border border-red-200 dark:border-red-800">
+              {{ errorMessage() }}
+            </div>
+          }
+
+          <div>
+            <button type="submit" [disabled]="loading() || registerForm.invalid"
+                    class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand-purple hover:bg-brand-purple-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-purple-dark disabled:bg-gray-400 disabled:cursor-not-allowed">
+              @if (loading()) {
+                <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Creating Account...
+              } @else {
+                Join Our Cooperative
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    } @else {
+      <div class="p-4 text-center">
+        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+          <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+        </div>
+        <h3 class="mt-4 text-2xl font-semibold text-gray-900">Welcome to the Flock!</h3>
+        <div class="mt-2 text-gray-600">
+          <p>A verification link is on its way to your inbox. Please click it to activate your member portal and begin your journey with us.</p>
+        </div>
+      </div>
+    }
+
+    <div class="text-sm text-center">
+      <a routerLink="/login" class="font-medium text-brand-purple hover:text-brand-purple-dark">
+        Already a member? Sign In
+      </a>
+    </div>
+
+  </div>
+</div>

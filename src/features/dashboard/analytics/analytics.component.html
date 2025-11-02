@@ -1,0 +1,86 @@
+<div class="space-y-8">
+  <div>
+    <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200">Your Farm's AI Insights</h1>
+    <p class="mt-1 text-gray-600 dark:text-gray-400">
+      Powered by our analytics engine, here are predictive insights to help you make proactive decisions for your farm.
+    </p>
+  </div>
+
+  @if (isLoading()) {
+    <div class="flex justify-center items-center p-16 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+      <div class="text-center text-gray-500 dark:text-gray-400">
+         <svg class="animate-spin mx-auto h-8 w-8 text-brand-purple" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+        <p class="mt-4 text-lg">Analyzing your farm data...</p>
+      </div>
+    </div>
+  } @else if(analyticsData(); as data) {
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+      
+      <!-- Egg Yield Forecast -->
+      <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md lg:col-span-2">
+        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">7-Day Egg Yield Forecast</h2>
+        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Projected daily egg production based on current flock data and weather patterns.</p>
+        <div class="mt-6 h-64 flex items-end justify-between space-x-4">
+          @for(forecast of data.eggYieldForecast; track forecast.day) {
+            <div class="flex-1 flex flex-col items-center">
+              <div class="w-full h-full flex items-end">
+                <div class="w-full bg-purple-200 rounded-t-md hover:bg-brand-purple transition-colors" [style.height]="getBarHeight(forecast.predictedYield)">
+                  <div class="relative h-full">
+                     <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-sm font-semibold text-brand-purple">{{ forecast.predictedYield }}</span>
+                  </div>
+                </div>
+              </div>
+              <span class="mt-2 text-xs font-medium text-gray-600 dark:text-gray-400">{{ forecast.day }}</span>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Other Analytics -->
+      <div class="space-y-8">
+        <!-- Feed Efficiency -->
+        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Feed Efficiency Score</h2>
+          <div class="flex items-center justify-center my-4">
+             <div class="relative w-32 h-32">
+                 <svg class="w-full h-full" viewBox="0 0 36 36">
+                    <path class="text-gray-200" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+                    <path class="text-green-500" stroke-linecap="round" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3" [attr.stroke-dasharray]="data.feedEfficiencyScore + ', 100'"></path>
+                 </svg>
+                 <div class="absolute inset-0 flex items-center justify-center">
+                    <span class="text-3xl font-bold text-brand-purple">{{ data.feedEfficiencyScore }}<span class="text-xl">%</span></span>
+                 </div>
+              </div>
+          </div>
+          <p class="text-sm text-center text-gray-600 dark:text-gray-400">This score reflects how effectively your flock is converting feed into eggs. Higher is better!</p>
+        </div>
+
+        <!-- Mortality Risk Alert -->
+        <div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">Mortality Risk Alert</h2>
+           <div class="mt-4 text-center">
+              <span class="px-4 py-2 text-lg font-bold rounded-full"
+                    [class.bg-green-100]="data.mortalityRisk.level === 'Low'"
+                    [class.text-green-800]="data.mortalityRisk.level === 'Low'"
+                    [class.bg-yellow-100]="data.mortalityRisk.level === 'Medium'"
+                    [class.text-yellow-800]="data.mortalityRisk.level === 'Medium'"
+                    [class.bg-red-100]="data.mortalityRisk.level === 'High'"
+                    [class.text-red-800]="data.mortalityRisk.level === 'High'">
+                {{ data.mortalityRisk.level }} Risk
+              </span>
+           </div>
+           <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ data.mortalityRisk.reason }}</p>
+        </div>
+      </div>
+
+    </div>
+  } @else {
+     <div class="text-center py-10 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+        <h3 class="text-lg font-semibold text-gray-700 dark:text-gray-300">Could Not Load Analytics</h3>
+        <p class="mt-1 text-gray-500 dark:text-gray-400">There was an issue retrieving the analytics data. Please try again later.</p>
+      </div>
+  }
+</div>

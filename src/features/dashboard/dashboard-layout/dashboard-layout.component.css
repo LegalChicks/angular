@@ -1,0 +1,4 @@
+/* No specific styles needed here as Tailwind is handling everything, but file is created for structure */
+a.bg-brand-purple-dark {
+    background-color: #3A2054;
+}
